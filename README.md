@@ -25,46 +25,54 @@ This repository contains an automoderator setup designed to automate content mod
 
 The code is divided into two primary sections:
 
-    Content Filters: Rules that trigger based on reports, keywords, or URLs to filter or remove problematic content.
+- Content Filters: Rules that trigger based on reports, keywords, or URLs to filter or remove problematic content.
 
-    Auto-Responses: Automated comments to ensure users are aware of subreddit rules and account requirements.
+- Auto-Responses: Automated comments to ensure users are aware of subreddit rules and account requirements.
 
 # 🛠 Installation
 
-    Navigate to your subreddit's Mod Tools.
+- Navigate to your subreddit's Mod Tools.
 
-    In the sidebar, find AutoModerator (Mod Tools > Moderation > Automod).
+- In the sidebar, find AutoModerator (Mod Tools > Moderation > Automod).
 
-    Copy and paste the entire code block from the configuration file.
+- Copy and paste the entire code block from the configuration file.
 
-    Save the page.
+- Save the page.
     
 # 🚀 Feature Breakdown
 
 ## 🛡 Safety & Security
 
-    Doxxing Filter: Uses complex regex to identify and filter email addresses or private contact info. It includes a whitelist for official community emails.
+- Report Auto-Filter: Automatically moves any item with 1 report to the Mod Queue for immediate human review.
 
-    Threat Filter: Screens for death wishes, calls for violence, and self-harm keywords.
+- Mass Edit Filter: Prevents users from "nuking" their history using third-party scripts (like Redact.dev) which can disrupt community archives.
 
-    Report Auto-Filter: Automatically moves any item with 1 report to the Mod Queue for immediate human review.
+- Doxxing Filter: Uses complex regex to identify and filter email addresses or private contact info. It includes a whitelist for official community emails.
 
-    Mass Edit Filter: Prevents users from "nuking" their history using third-party scripts (like Redact.dev) which can disrupt community archives.
+- Threat Filter: Screens for death wishes, calls for violence, and self-harm keywords.
 
 ## 🚫 Spam & Scam Prevention
 
-    T-Shirt/Merch Filter: A massive database of known "Gear" and "Shirt" scam domains.
+- NSFW and Shock Sites Filters: TEXT HERE
 
-    Link Shorteners: Blocks over 300+ known link shorteners to prevent users from bypassing domain filters.
+- Scam/Spam Sites Filter: TEXT HERE
 
-    Snapchat/Social Spam: Detects "Add me on Snap" patterns and bot-like behavior.
+- T-Shirt/Merch Filter: A massive database of known "Gear" and "Shirt" scam domains.
 
-    Crowdfunding & Petitions: Filters GoFundMe, Change.org, and similar links to prevent unauthorized solicitations.
+- Snapchat/Social Spam: Detects "Add me on Snap" patterns and bot-like behavior.
+
+- Crowdfunding & Petitions: Filters GoFundMe, Change.org, and similar links to prevent unauthorized solicitations.
+
+- Petition Sites Filter: TEXT HERE
+
+- Link Shorteners: Blocks over 300+ known link shorteners to prevent users from bypassing domain filters.
 
 ## ⚖️ Community Standards
 
-    Age/Karma Thresholds: Filters content from accounts less than 7 days old or with less than 50 karma.
+- Tabloid Accounts Filter: TEXT HERE
 
-    Political Filter: Screens for highly volatile political keywords to keep the community focused on its primary topic.
+- Age/Karma Thresholds: Filters content from accounts less than 7 days old or with less than 50 karma.
 
-    Offensive Remarks/Sexual Harassment: Two heavy-duty blocks of keywords and regex to catch slurs, bigotry, and harassment.
+- Political Filter: Screens for highly volatile political keywords to keep the community focused on its primary topic.
+
+- Offensive Remarks/Sexual Harassment: Two heavy-duty blocks of keywords and regex to catch slurs, bigotry, and harassment.
