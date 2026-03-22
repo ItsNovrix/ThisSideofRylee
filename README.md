@@ -21,7 +21,7 @@ This repository contains an automoderator setup designed to automate content mod
 
 8. Technical Notes
 
-📖 Overview
+# 📖 Overview
 
 The code is divided into two primary sections:
 
@@ -29,14 +29,12 @@ The code is divided into two primary sections:
 
     Auto-Responses: Automated comments to ensure users are aware of subreddit rules and account requirements.
 
-🛠 Installation
+# 🛠 Installation
 
     Navigate to your subreddit's Mod Tools.
 
-    In the sidebar, find AutoModerator (usually under "Moderation" or "Content Controls").
+    In the sidebar, find AutoModerator (Mod Tools > Moderation > Automod).
 
     Copy and paste the entire code block from the configuration file.
-
-    Important: Use Ctrl+F to search for r/SubNameHere and replace it with your actual subreddit name.
 
     Save the page.
