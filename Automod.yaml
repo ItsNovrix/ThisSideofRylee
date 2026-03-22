@@ -1,0 +1,421 @@
+#
+#                __   _____       _     _   _                      _    _               
+#               / /  / ____|     | |   | \ | |                    | |  | |              
+#     _ __     / /  | (___  _   _| |__ |  \| | __ _ _ __ ___   ___| |__| | ___ _ __ ___ 
+#    | '__|   / /    \___ \| | | | '_ \| . ` |/ _` | '_ ` _ \ / _ \  __  |/ _ \ '__/ _ \
+#    | |     / /     ____) | |_| | |_) | |\  | (_| | | | | | |  __/ |  | |  __/ | |  __/
+#    |_|    /_/     |_____/ \__,_|_.__/|_| \_|\__,_|_| |_| |_|\___|_|  |_|\___|_|  \___|
+#                                                                                    
+#                                                                                                                                                                                                
+#                  _                            _ 
+#       /\        | |                          | |
+#      /  \  _   _| |_ ___  _ __ ___   ___   __| |
+#     / /\ \| | | | __/ _ \| '_ ` _ \ / _ \ / _` |
+#    / ____ \ |_| | || (_) | | | | | | (_) | (_| |
+#   /_/    \_\__,_|\__\___/|_| |_| |_|\___/ \__,_|                                           
+
+
+#-----------------------------------------------------------------#
+#                      TABLE OF CONTENTS                          #
+#-----------------------------------------------------------------#
+
+#---------------------------------#
+#        CONTENT FILTERS          #
+#---------------------------------#
+
+# 1) REPORT FILTER
+# 2) MASS EDIT FILTER
+# 3) DOXXING FILTER
+# 4) THREAT FILTER
+# 4) TABLOID ACCOUNT FILTER
+# 5) AGE/KARMA FILTER
+# 6) POST LENGTH FILTER
+# 6) POLITICAL FILTER
+# 7) OFFENSIVE REMARKS FILTER
+# 8) SEXUAL HARASSMENT FILTER
+# 9) NSFW SITES FILTER
+# 10) SHOCK SITES FILTER
+# 11) SCAM/SPAM SITES FILTER
+# 12) T-SHIRT SPAM FILTER
+# 13) SNAPCHAT SPAM FILTER
+# 14) CROWDFUNDING SITES FILTER
+# 15) PETITION SITES FILTER
+# 16) LINK SHORTENER FILTER
+
+#---------------------------------#
+#        AUTO-RESPONSES           #
+#---------------------------------#
+
+# 17) RULES REMINDER COMMENT
+
+#-----------------------------------------------------------------------------------------------------#
+#    _____ ____  _   _ _______ ______ _   _ _______   ______ _____ _   _______ ______ _____   _____   #
+#   / ____/ __ \| \ | |__   __|  ____| \ | |__   __| |  ____|_   _| | |__   __|  ____|  __ \ / ____|  #
+#  | |   | |  | |  \| |  | |  | |__  |  \| |  | |    | |__    | | | |    | |  | |__  | |__) | (___    #
+#  | |   | |  | | . ` |  | |  |  __| | . ` |  | |    |  __|   | | | |    | |  |  __| |  _  / \___ \   #
+#  | |___| |__| | |\  |  | |  | |____| |\  |  | |    | |     _| |_| |____| |  | |____| | \ \ ____) |  #
+#   \_____\____/|_| \_|  |_|  |______|_| \_|  |_|    |_|    |_____|______|_|  |______|_|  \_\_____/   #
+#                                                                                                     #
+#-----------------------------------------------------------------------------------------------------#
+
+# ----------------------------------------------------------------#
+#                       REPORT FILTER                             #
+# ----------------------------------------------------------------#
+
+#  Rule Name: Report auto-filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically remove anything that gets 1 report and send to Mod Queue
+---
+    type: any
+    reports: 1
+    action: filter
+    action_reason: Report received
+    modmail: The above {{kind}} by /u/{{author}} has received a report. Please investigate.
+---
+# ----------------------------------------------------------------#
+#                      MASS EDIT FILTER                           #
+# ----------------------------------------------------------------#
+
+#  Rule Name: Mass edit filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically remove anything mass edit content
+---
+    type: any
+    body+url(includes): ['redact.dev', 'codepen.io/j0be', 'github.com/j0be', 'codepen.io/pkolyvas', 'the-federation.info']
+    is_edited: true
+    action: remove
+    action_reason: Mass Edited Content | [{{match}}]
+---
+# ----------------------------------------------------------------#
+#                       DOXXING FILTER                            #
+# ----------------------------------------------------------------#
+
+#  Rule Name: Doxxing filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically remove doxxing content
+---
+    title+body (regex): ['(?!(abuse|help|info|no-?reply|phishing|service|spoof|support)\@)[\w!#$%&\x27*+\-./=?\^\x60{|}~]+\@([\w-]{1,64}\.)+([a-z]{2,16}|xn--[a-z0-9-]{1,60})']
+    ~title+body#whitelist: [okay.address1@example.com, okay.address2@example.com]
+    action: filter
+    action_reason: Possible doxxing | [{{match}}] | Please review
+    modmail_subject: Doxxing Alert!
+    modmail: |
+        {{permalink}}
+
+        The above {{kind}} by /u/{{author}} was removed because it contained a possible doxxing incident. Please investigate immediately.
+
+        If the user is doxxing, [ban them](/r/{{subreddit}}/about/banned) and [report them to the Reddit admins](http://www.reddit.com/message/compose?to=%2Fr%2Freddit.com&subject=Doxxing%20Report:%20%2Fu%2F{{author}}) immediately.
+---
+#-----------------------------------------------------------------#
+#                        THREAT FILTER                            #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Threat filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter possible threats
+---
+    type: any
+    title+body (regex): [
+        # Death Wishes
+        "(I\\s*hope|hope)\\s*(you|u|he|she|they)\\s*(burns?|dies?|die\\s*in\\s*(a|the)?\\s*crash|burn\\s*in\\s*(hell|a\\s*crash|the\\s*crash))",
+        "burn\\s*in\\s*(hell|a\\s*crash|the\\s*crash|that\\s*crash|this\\s*crash)",
+        "die\\s*in\\s*(a|the)?\\s*crash",
+        "(go|burn|rot)\\s*in\\s*hell",
+        "(crash\\s*and\\s*die|die\\s*in\\s*.*crash)",
+        "I\\s*hope\\s*(you|she|he|they)\\s*dies?",
+        "(you|u|he|she|they|it|that)\\s*deserved\\s*it",
+        "(you|u|he|she|they|it|that)\\s*deserves?\\s*(to\\s*)?dies?",
+        "(you|u|he|she|they|it|that)\\s*(has|had|have)\\s*it\\s*coming",
+
+        # Self-Harm
+        "commit\\s*suicide",
+        "kill\\s*your(self|selves)",
+        "kill\\s*myself",
+        "\\bKYS\\b",
+        "\\bunalive\\b",
+        "hang\\s*(him|her|them|(yo)?urself)",
+        
+        # Weapons
+        "\\b7\\.62\\b",
+        "\\b9\\s*mm\\b",
+        
+        # Calls for violence
+        "\\bassassinate\\b",
+        "(should|need\\s*to)\\s*(be\\s*)?(shot|killed)",
+        "(want|should|need)\\s*to\\s*kill",
+        "kill\\s*(him|her|them|u|you)"
+    ]
+    action: filter
+    action_reason: "Threat screening | [{{match}}] | Please review"
+---
+#-----------------------------------------------------------------#
+#                     TABLOID ACCOUNT FILTER                      #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Tabloid account filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter users to the Mod Queue if they are a tabloid
+---
+    type: any
+    author:
+        name (includes): [dailymail, tmz, people, okmagazine, pagesix, nypost]
+    action: filter
+    action_reason: Tabloid User | {{author}} | Please review
+    modmail: |
+
+        User **u/{{author}}** submitted the above. This user is a tabloid user and their submission has been filtered to the mod queue.
+    
+        Please investigate and action the user if necessary.
+---
+#-----------------------------------------------------------------#
+#                       AGE/KARMA FILTER                          #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Age/Karma filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter comments from users with low account age/karma
+---
+    type: any
+    moderators_exempt: true
+    author:
+       account_age: "< 7 days"
+       combined_karma: "< 50"
+       satisfy_any_threshold: true
+    action: filter
+    action_reason: "Account Age/Karma Threshold Not Met"
+    priority: 5
+    message: |
+
+        Your submission has been filtered for manual review because your account does not currently meet the minimum subreddit age/karma requirements.
+
+        r/SubNameHere requires accounts to be at least 7 days old **and** have 50 combined karma. Your content will be reviewed by a moderator shortly.
+
+        — The r/SubNameHere Mod Team
+---
+# ----------------------------------------------------------------#
+#                      POST LENGTH FILTER                         #
+# ----------------------------------------------------------------#
+
+#  Rule Name: Post length filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/2026
+#  Description: Automatically remove posts that are too short
+---
+    type: text submission
+    body_shorter_than: 20
+    action: filter
+    action_reason: Body text too short
+    comment: |
+
+        Your submission has been filtered for manual review because the body text of your post did not meet our length requirements. 
+
+        Feel free to reach out to us if you have any questions. 
+
+        — The r/SubNameHere Mod Team
+---
+#-----------------------------------------------------------------#
+#                        POLITICAL FILTER                         #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Political filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter possibly problematic political content
+---
+    type: any
+    title+body (regex): ["dei", "trump", "Donald", "Biden", "liberal", "nazi", "biden", "luigi", "tesla", "elon", "musk", "Charlie Kirk", "kirk", "tpusa", "turning point", "turning point usa", "libtard", "tds", "magat", "magats", "maggat", "maggats", "liberal\\W?morons?", "sjw", "snow\\W?flakes?", "TDS"]
+    action: filter
+    action_reason: Political screening | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                 OFFENSIVE REMARKS FILTER                        #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Offensive remarks flagging
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter submissions with offensive terms
+---
+# Block 1: Standard Keywords
+    type: any
+    title+body (includes): ["African IQ", "all lives matter", "ameri(turd|cunt|[phf]+[eoia]+g+([ieao]+[tryie]+)?)[sz]*", "anti(\\s|-)?white", "ape\\W?fricans?", "bat\\W?soup", "black IQ", "blacks", "blue lives matter", "bundle of (billets|sticks|wood)", "camel\\W?fuc?kers?", "chimp(ire)?s?", "china\\W?m[ae]ns?", "chinese virus", "china boy", "ch[io]n[gk]s?", "coal burner", "coalie", "coons?(y|i?e?s?|er)?", "coontown", "crackers?", "dark(e?ys?|ies?)", "(diaper|dot|rag|towel)\\W?heads?", "(fuck|fuk) (black|white|brown|dark|african) people", "goat\\W?fuckers?", "groids?", "happy\\W?merchants?", "high\\s?yellows?", "jungle\\W?bunn?(ie|y)?s?", "kiggers", "kkk", "klan", "mignorants?", "mongoloids?", "moon\\W?crickets?", "(shit|mud)\\W?(child(ren)?|skin)s?", "muslimes?", "mu(zz|ss)ie(s)?", "negroe?s?", "nibba", "n[aeiouy]gg?[eu]r", "nig\\W?town", "nuffin", "n-word", "pakis?", "pike?(y|ie)?s?", "(p[o0]rch|sand)\\s?nigg?(er|r|a|let)?s?", "(p[0o]rch|sand)\\W?m[0o]nk(ey|ie|y)s?", "put[o0] gringo", "r/hateblackpeople", "religion of (pieces|piss)", "soy\\W?boys?", "spear\\s?chuckers?", "spi(c|k|ck|g|gott?(ie|y))s?", "still racist", "tarbab(y|ie)s?", "white genocide", "white lives matter", "white power", "whiterights?", "beaner", "camel jockey", "ching chong", "coon", "coonass", "coon-ass", "dyke", "fudgepacker", "gook", "homo", "honky", "jigaboo", "jiggaboo", "kike", "kyke", "kraut", "niglet", "nignog", "nig-nog", "nigger", "retard", "retarded", "sand nigger", "sheeny", "shylock", "slut", "twink", "wetback", "wet-back", "whore", "zipperhead", "asshole", "bitch"]
+    action: filter
+    action_reason: "Offensive term | [{{match}}] | Please review"
+---
+# Block 2: Regex Logic
+    title+body (regex): ["\\b(sand\\s?)?[nŃ][ei!1*|lîį!][bcgkq69ß&]+([ageru34@*ë]+[rsz]*)?\\b", "(you('re|\\s+are)?|u\\s+r?)\\s*(a[ns]?\\s+)?(bitch|ass(hole)?|loser|retard(ed)?|gay|homo|suck)s?", "eat (cat|dog|bat)s?", "japs?", "kkk", "klan", "n[8ïī!jìîí¡i][69gkq][69gkq]?[a@q]", "n[8ïī!jìîí¡i][69gkq][69gkq]?[e3]?(let|r|town|Я)?[5sz]?", "n[1!i]gs?-?", "n[i!j1e]+gg?(rs?|ett?e?s?|lets?|ress?e?s?|r[a0oe]s?|[ie@ao0!]rs?|r[o0]ids?|ab[o0]s?|erest)", "n[i1][gkq69][gkq69]?([e3]r)?(n[o0]g|l[e3]t|r[e3][s5][s5])?([e3]?[s5])?", "n ?word", "nigg?(er|r|r?a|lett?)s?z?", "nigg?[aeoi]s?", "nigg?s?", "88", "aryan", "f[üu][3e]?hrer", "gass? the", "hail h", "heil", "hh", "hitler", "holo\\W?hoaxe?s?", "juden?", "jws", "k[iy]kes?", "mein kr?am[phf]", "nazis?", "schmutz", "shekel", "sieg", "vult", "zyklon", "(2|two)\\s?genders", "abomination", "antifas?", "average IQ", "beetusbehemoths?", "boot\\W?lips?", "child sex", "christ\\W?killers?", "cock\\W?suckers?", "cunts?y?", "d(i|y)ke(s)?", "f[a@]g(g?[eo0i]t|s)?", "(f|ph)[a@]?[g69q][g69q]?([e0aio]t?)?t?(ed|ie|y)?s?t?", "faggish", "faggit", "fat\\W?(asse?|fuck)?s?", "fatt(ie|y)s?", "femi\\W?nazis?", "fuck\\W?boys?", "gae", "ghey", "(re|fuck|jerk|lib|republi)?tard(s|ed(ly)?)?", "lady\\W?boys?", "lesbos?", "mental(ly)?\\sill(ness)?", "mentally handicapped", "midget", "obeasts?", "pedosexual", "queer\\Wbags?", "she[- _]?male[sz]*", "shit\\W?(bag|dick|lord)s?", "siss(y|ie)", "SLGB[TS]S?", "sodomite", "spastic(s|ated)?", "spic", "spick", "superphobi?(c|a|e)s?", "super ?(strai(gh)?t|gay|lesbian|bi|(bi)?sexual)s?", "terf", "tran(?!s)n?(y|ie)?[sz]?\\b", "(you|you're|your) (are|look)? (fat|obese)", "You will never be a (real )?(woman|man)", "ywnba(r)?(m|w)"]
+    ~title+body+url: ["neck", "nice", "nick", "nic", "neg", "auckland", "aukland"]
+    action: filter
+    action_reason: "Offensive term | [{{match}}] | Please review"
+---
+#-----------------------------------------------------------------#
+#                   SEXUAL HARASSMENT FILTER                      #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Sexual harassment filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter possible sexual harassment
+---
+    type: any
+    title+body (regex): ["3 ?(sum|some)", "69", "anals?", "are\\W?you\\W?single", "ass", "back\\W?door\\W?sluts?", "ball torture", "bea?stiality", "(blow|hand)\\s*jobs?", "boners?", "Brazzers", "butt\\W?(munch|holes?|hurt|sex)", "butt\\W?plugs?", "[ck]+[ou]+m+e?.?dump(ster)?[sz]*", "cumm?\\W?(s|ing|ies|ed|shots?)?", "deez nuts", "dicks?", "dick\\W?girls?", "down bad", "ejeculate(s|d)?", "erections?", "fapp?(s|ing|er|ed)", "fist(ing|ed)?s?", "flesh\\W?lights?", "fu(ck|xx|cx|xk)able", "glory\\W?holes?", "hoes?", "horny", "i'?d smash", "jack(ing|in')? off", "jail\\W?bait", "jerk(s|ing)?\\W?offs?", "legal teens?", "lingerie", "masturbat", "mast[ue]rbat(es?|ing|ion)?", "[mdg]ilfs?y?", "necrophili?ac?s?", "no(-| )?nut(-| )?november", "NNN", "nudes?", "p[0o*]rno?s?", "pornhub", "pornography", "pussy", "rape(s|d|y)?", "rapists?", "ray\\W?ping", "rub(s|bing)?\\W?(you|one|1)?\\W?off", "semen", "three(some|sum)", "tidd(y|ie)?s?", "t[1i]tt?(a|y|ie)?s?", "turned on", "unzip", "wank(er|ing)?s?", "whores?d?", "zoophil(e|ia)"]
+    action: filter
+    action_reason: Sexual harassment | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                       NSFW SITES FILTER                         #
+#-----------------------------------------------------------------#
+
+#  Rule Name: NSFW sites filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter NSFW sites
+---
+    type: any
+    title+body: ["Chaturbate", "Gonewild", "only fans", "onlyfans", "RedTube", "XHamster", "XVideos"]
+    action: filter
+    action_reason: NSFW link | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                      SHOCK SITES FILTER                         #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Shock sites filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter shock sites
+---
+    url+body: [goatse.cx, oralse.cx, goatse.ca, oralse.ca, goat.cx, goatse.ru, 1girl1pitcher.com, 1girl1pitcher.org, guy1cock.com, 1man1jar.org, 1man2needles.com, 1priest1nun.com, 2girls1cup-free.com, 2girls1cup.com, 2girls1cup.nl, 2girls1cup.ws, 2girls1finger.com, 2girls1finger.org, 2guys1stump.org, 3guys1hammer.ws, 4girlsfingerpaint.com, 4girlsfingerpaint.org, bagslap.com, ballsack.org, bluewaffle.biz, bottleguy.com, bowlgirl.com, cadaver.org, clownsong.com, copyright-reform.info, cshacks.partycat.us, cyberscat.com, dadparty.com, detroithardcore.com, donotwatch.org, dontwatch.us, eelsoup.net fruitlauncher.com, fuck.org, funnelchair.com, goatse.bz, goatse.ru, goatsegirl.org, hai2u.com, homewares.org, howtotroll.org, japscat.org, jiztini.com, junecleeland.com, kids-in-sandbox.com, kidsinsandbox.info, lemonparty.biz, lemonparty.org, lolhello.com, loltrain.com, meatspin.biz, meatspin.com, merryholidays.org, milkfountain.com, mudfall.com, mudmonster.org, nimp.org, nobrain.dk, nutabuse.com, octopusgirl.com, on.nimp.org, painolympics.info, phonejapan.com, pressurespot.com, prolapseman.com, scrollbelow.com, selfpwn.org, sexitnow.com, sourmath.com, suckdude.com, thatsjustgay.com, thatsphucked.com, thehomo.org, themacuser.org, thepounder.com, tubgirl.me, tubgirl.org, turdgasm.com, vomitgirl.org, walkthedinosaur.com, whipcrack.org, wormgush.com, xvideoslive.com, y8.com, youaresogay.com, ypmate.com, zentastic.com, youaresogay.com, zentastic.com, kreep.org, killerhigh.org, europeanguardian.com/]
+    action: filter
+    action_reason: Shock site link | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                  SCAM/SPAM SITES FILTER                         #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Scam/spam sites filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter scam/spam sites
+---
+    domain (includes): [shirt, b3shop amezes, baamboom, bestglobaltees, beststorefortee, bestteeshop, besttfashion, bigcartel, blinkvero, bonfire, cafepress, christmastees, cooltees, cottonbureau, dirtyalbright, displate, dizcope, exclusivetees, futbolkiteam, gearbubble, gearcreators, gearshop, halloweencolors, bhomage.com, hoodietshirt, hottopics, indiegetup, maketravells, masterthetees, moteefe, moviestowatch, myguitarreview, myshopify, mystorybeginshirt, newdokan, newshoper, newtshirtshop, orimpogames, bprem.li, qualifiedfashion, realbrandusa, redapplegear, redbubble, rockinggear, shirtsuite, shopify.com, shopzone, spreadshirt, sunfrog, sungearstore, supergofastshop, tee.pub, teechip, teepublic, teesbuilder, teesdesk4u, teesfinde, teesparrow, teespartner, teespring, teezily, thefilmfix, trendsshirt, trendznirvana, tshopzone, usateestore, usgearfair, vamostravelers, viralstyle, zazzle, tees-to-go.com, tees, etsy, fbcdn, hgld.ru, pikabu.ru, d.tube, longstoryshort, sunfrog.com, killergamingworld.com, hoodiesland.com, teespring.com, teezily.com,customink.com, webtoons.com, societyplus.net, unexpectedstylepick.com, cottonbureau.com, heartyshirts.com, greyery.com, allaboutcats.com, catnipgame.com, prieoshop.com, prieoshop.online, kittydesires.com, nothing-but-high-quality.creator-spring.com, flowcode.com, linklyhq.com, tees4u-us.com, themasterpiece.market, gearsgoals.com, ahanbio.com, dutchpetmed.com, patosgatos.com, igg.me, rdbl.co, ww2.me, アレア.me, ourecmmarket.today, earthclass, artsover.market, gearshungry.com, theboxtees.com, best-buy.reviews, petreader.net, displateusa.com, shirtwind.company, gearsmartsy.com, artshungry.com, teesbent.pub, ecmmarket.hyperphp.com, gearzhut.com, martsaa.limited, solu.bio, displateusa.moda, ourecmmarkets.com, gearzhungry.com, thegearlive.com, boxtees.online, secure.givewell.org, firest.shop, hungry.com, hungry, graezhungry.com, rockinghut.com, apolloptic.co, therockingmart.com, coolprinty.com, lifestyles7.com, clicklo.net, ukhungryshop.com, ukhungry.com, thegearsfashion.com, teepublic.com, globalteeshop.com]
+    action: filter
+    action_reason: Scam/spam site | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                   T-SHIRT SPAM FILTER                           #
+#-----------------------------------------------------------------#
+
+#  Rule Name: T-shirt spam filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter t-shirt spam
+---
+    type: any
+    title+body (includes, regex): ['(.)google.com/url?q=(.)', '^((\w?://)|www).(.)gear(.).(.)', '::::>>>>', '^((\w?://)|www).(.)gear(.).(.)']
+    action: filter
+    action_reason: T-shirt spam | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                   SNAPCHAT SPAM FILTER                          #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Snapchat spam filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter Snapchat spam
+---
+    type: comment
+    body (regex): 
+        - '(add|contact|message|dm|pm|follow)\s*(me\s*)?(on\s*)?snap(chat)?'
+        - 'snap(chat)?\s*(is|:)\s*\w+'
+        - 'snap(chat)?\.com/\w+'
+        - '\U0001F47B'
+    action: filter
+    action_reason: Possible Snapchat spam | [{{match}}] | Please review
+    set_locked: true
+    comment: |
+
+        Your comment has been automatically filtered for review due to containing possible Snapchat spam. 
+
+        Feel free to reach out to us if you have any questions.
+
+        — The r/SubNameHere Mod Team
+---
+#-----------------------------------------------------------------#
+#               CROWDFUNDING SITES FILTER                         #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Crowdfunding sites filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter crowdfunding sites
+---
+    title+body+domain (includes): [begslist.com, booster.com, cash.app, cash.me, charityvest.org, crowdfunder.co.uk, crowdrise.com, donorschoose.org, firstgiving.com, fnd.us, fundanything.com, fundly.com, fundrazr.com, generosity.com, gf.me, gfwd.at, givealittle.co.nz, giveforward.com, givesendgo.com, gofund.me, gofundme.com, goget.fund, gogetfunding.com, igg.me, indiegogo.com, justgiving.com, kck.st, ketto.org, kickbooster.me, kckb.st, kickstarter.com, launchfinance.com.au, m-lp.co, patreon.com, payfriendz.me, payit2.com, payitsquare.com, paypal.com/cgi-bin, paypal.com/paypalme, paypal.me, petcaring.com, pitchfuse.com, redditmade.com, sponsorchange.org, tilt.com, tilt.tc, totalgiving.co.uk, youcaring.com, youcaring.net, youcaring.org]
+    action: filter
+    action_reason: Crowdfunding site | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                 PETITION SITES FILTER                           #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Petition sites filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter petition sites
+---
+    title+body+domain (includes): [act.rootsaction.org, actblue.com, action.sumofus.org, activism.thenation.com, avaaz.org, change.org, chn.ge, credomobilize.com, demandprogress.org, easypolls.net, go.berniesanders.com, gopetition.com, leftaction.com, moveon.org, petitions.whitehouse.gov, signon.org, startjoin.com, strawpoll.me, takepart.com, thepetitionsite.com, watchdog.net]
+    action: filter
+    action_reason: Petition site | [{{match}}] | Please review
+---
+#-----------------------------------------------------------------#
+#                  LINK SHORTENER FILTER                          #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Link shortener filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter link shorteners
+---
+    type: any
+    title+body+domain (includes): [0rz.tw, 0rz.tw, 1-url.net, 1link.in, 1tk.us, 1un.fr, 1url.com, 1url.cz, 1wb2.net, 2.gp, 2.ht, 2ad.in, 2big.at, 2doc.net, 2fear.com, 2pl.us, 2tu.us, 2ty.in, 2u.xf.cz, 2ya.com, 3.ly, 3ra.be, 3x.si, 4i.ae, 4ms.me, 4sq.com, 4url.cc, 4view.me, 5em.cz, 5url.net, 5z8.info, 6fr.ru, 6g6.eu, 6url.com, 7.ly, 7fth.cc, 7li.in, 7vd.cn, 8u.cz, 76.gd, 77.ai, 98.to, 126.am, 307.to, 944.la, a.gg, a.nf, a0.fr, a2a.me, aa.cx, abbr.sk, abbrr.com, abcurl.net, ad-med.cz, ad.vu, ad5.eu, ad7.biz, adb.ug, adcraft.co, adcrun.ch, adf.ly, adfa.st, adfly.fr, adjix.com, adli.pw, adv.li, afx.cc, ajn.me, aka.gr, alil.in, all.fuseurl.com, alturl.com, amzn.to, any.gs, aqva.pl, ar.gy, ares.tl, arst.ch, asso.in, atu.ca, au.ms, ayt.fr, azali.fr, azc.cc, b00.fr, b2l.me, b23.ru, b54.in, bacn.me, baid.us, bc.vc, bcool.bz, bee4.biz, bfy.tw, bim.im, binged.it, bit.do, bit.ly, bitly.com, bitw.in, bizj.us, bkite.com, blap.net, ble.pl, blip.tv, bloat.me, boi.re, bote.me, bougn.at, br4.in, bravo.ly, brk.to, brzu.net, bsa.ly, budurl.com, buk.me, bul.lu, burnurl.com, buzurl.com, bxl.me, bzh.me, c-o.in, cachor.ro, canurl.com, captur.in, catchylink.com, cbs.so, cbug.cc, cc.cc, ccj.im, cf.ly, cf2.me, cf6.co, chilp.it, chzb.gr, cjb.net, cl.lk, cl.ly, clck.ru, cli.gs, cliccami.info, clickmeter.com, clickthru.ca, clikk.in, clop.in, cn86.org, conta.cc, cort.as, cot.ag, couic.fr, cr.tl, crisco.com, crks.me, ctvr.us, cudder.it, cur.lv, curl.im, cut.pe, cut.sk, cutt.eu, cutt.us, cutu.me, cuturl.com, cybr.fr, cyonix.to, d75.eu, daa.pl, dai.ly, db.tt, dd.ma, ddp.net, decenturl.com, dfl8.me, dft.ba, digbig.com, digg.com, disq.us, dld.bz, dlvr.it, do.my, doiop.com, dolp.cc, dopen.us, dopice.sk, droid.ws, dv.gd, dwarfurl.com, dy.fi, dyo.gs, e37.eu, easyuri.com, easyurl.com, easyurl.net, ecra.se, editions.limited, eepurl.com, ely.re, erax.cz, erw.cz, esyurl.com, eweri.com, ewerl.com, ex9.co, ezurl.cc, fa.b, fa.by, fav.me, fb.me, fbshare.me, ff.im, fff.re, fff.to, fff.wf, fhurl.com, filoops.info, filz.fr, fire.to, firsturl.de, firsturl.net, flic.kr, flq.us, fly2.ws, fnk.es, foe.hn, folu.me, fon.gs, freak.to, freze.it, fur.ly, fuseurl.com, fuzzy.to, fwd4.me, fwib.net, g.ro.lt, g00.me, gg.gg, gizmo.do, gl.am, go.9nl.com, go.ign.com, go.usa.gov, go2.me, go2cut.com, goo.gl, goo.lu, google.com/url, goshrink.com, gowat.ch, grem.io, gri.ms, guiama.is, gurl.es, hadej.co, hellotxt.com, hex.io, hide.my, hiderefer.com, hjkl.fr, hmm.ph, hops.me, hover.com, href.in, href.li, hsblinks.com, ht.ly, htxt.it, huff.to, hugeurl.com, hurl.it, hurl.me, hurl.ws, i-2.co, i99.cz, icanhaz.com, icit.fr, ick.li, icks.ro, idek.net, iguang.tw, iiiii.in, iky.fr, ilix.in, info.ms, inreply.to, is.gd, iscool.net, isra.li, iterasi.net, itm.im, its.my, ity.im, ix.lt, ix.sk, j.gs, j.mp, jdem.cz, jieb.be, jijr.com, jmp2.net, jp22.net, jqw.de, just.as, kask.us, kd2.org, kfd.pl, kissa.be, kl.am, klck.me, korta.nu, kr3w.de, krat.si, kratsi.cz, krod.cz, krunchd.com, kuc.cz, kxb.me, l-k.be, l.gg, l9.fr, l9k.net, lat.ms, lc-s.co, lc.cx, lcut.in, lemde.fr, libero.it, lick.my, lien.li, lien.pl, liip.to, liltext.com, lin.cr, lin.io, linkbee.com, linkbun.ch, linkn.co, liurl.cn, llu.ch, ln-s.net, ln-s.ru, lnk.co, lnk.gd, lnk.in, lnk.ly, lnk.ms, lnk.sk, lnkd.in, lnks.fr, lnkurl.com, lnky.fr, lnp.sn, loopt.us, lp25.fr, lru.jp, lt.tl, lurl.no, lvvk.com, m1p.fr, m3mi.com, macte.ch, make.my, mash.to, mcaf.ee, mdl29.net, merky.de, metamark.net, mic.fr, migre.me, minilien.com, miniurl.com, minu.me, minurl.fr, mke.me, moby.to, moourl.com, more.sh, mrte.ch, mut.lu, myloc.me, myurl.in, n.pr, nbc.co, nblo.gs, ne1.net, net.ms, net46.net, nicou.ch, nig.gr, njx.me, nn.nf, not.my, notlong.com, nov.io, nq.st, nsfw.in, nutshellurl.com, nxy.in, nyti.ms, o-x.fr, oc1.us, okok.fr, om.ly, omf.gd, omoikane.net, on.cnn.com, on.mktw.net, onforb.es, orz.se, ou.af, ou.gd, oua.be, ow.ly, p.pw, para.pt, parky.tv, past.is, pd.am, pdh.co, ph.ly, pic.gd, pic.gd tweetphoto, pich.in, pin.st, ping.fm, piurl.com, pli.gs, plots.fr, pm.wu.cz, pnt.me, po.st, politi.co, poprl.com, popular.rocks, post.ly, posted.at, pp.gg, ppfr.it, ppst.me, ppt.cc, ppt.li, prejit.cz, prettylinkpro.com, profile.to, ptab.it, ptiturl.com, ptm.ro, pub.vitrue.com, pw2.ro, py6.ru, q.gs, qbn.ru, qicute.com, qlnk.net, qqc.co, qqurl.com, qr.ae, qr.net, qrtag.fr, qte.me, qu.tc, quip-art.com, qxp.cz, qxp.sk, qy.fi, r.im, rb6.co, rb6.me, rcknr.io, rdz.me, read.bi, readthis.ca, reallytinyurl.com, redir.ec, redir.fr, redirects.ca, redirx.com, redu.it, ref.so, reise.lc, relink.fr, retwt.me, ri.ms, rickroll.it, riz.cz, riz.gd, rod.gs, roflc.at, rsmonkey.com, rt.nu, rt.se, ru.ly, rubyurl.com, rurl.org, rww.tw, s-url.fr, s4c.in, s7y.us, s7y.us shrinkify, safe.mn, sagyap.tk, sameurl.com, scrnch.me, sdu.sk, sdut.us, seeme.at, segue.se, sh.st, shar.as, shar.es, sharein.com, sharetabs.com, shink.de, shorl.com, short.cc, short.ie, short.nr, short.pk, short.to, shortlinks.co.uk, shortna.me, shorturl.com, shoturl.us, shout.to, show.my, shrinkify.com, shrinkr.com, shrinkster.com, shrt.fr, shrt.in, shrt.st, shrten.com, shrunkin.com, shw.me, shy.si, sicax.net, simurl.com, sina.lt, sk.gy, skr.sk, skroc.pl, slate.me, smallr.com, smll.co, smsh.me, smurl.name, sn.im, snipr.com, snipurl.com, snsw.us, snurl.com, soo.gd, sp2.ro, spedr.com, spn.sr, sq6.ru, sqrl.it, srnk.net, srs.li, ssl.gs, starturl.com, sturly.com, su.pr, surl.co.uk, surl.hu, surl.me, sux.cz, sy.pe, t.cn, t.lh.com, ta.gd, tabzi.com, tau.pe, tbd.ly, tcrn.ch, tdjt.cz, tgr.me, tgr.ph, thesa.us, thrdl.es, tighturl.com, tin.li, tini.cc, tiniuri.com, tiny.cc, tiny.lt, tiny.ly, tiny.ms, tiny.pl, tiny123.com, tinyarro.ws, tinyarrows.com, tinylink.in, tinytw.it, tinyuri.ca, tinyurl.com, tinyurl.hu, tinyvid.io, tixsu.com, tl.gd, tldr.sk, tllg.net, tmi.me, tnij.org, tnw.to, tny.com, tny.cz, to.ly, to8.cc, togoto.us, tohle.de, totc.us, toysr.us, tpm.ly, tpmr.com, tr.im, tr.my, tr5.in, tra.kz, traceurl.com, trck.me, trick.ly, trkr.ws, trunc.it, turo.us, tweetburner.com, tweez.me, twet.fr, twhub.com, twi.im, twirl.at, twit.ac, twitclicks.com, twitterpan.com, twitterurl.net, twitterurl.org, twitthis.com, twiturl.de, twlr.me, twurl.cc, twurl.nl, u.bb, u.mavrev.com, u.nu, u.to, u6e.de, u76.org, ub0.cc, uby.es, ucam.me, ug.cz, ulmt.in, ulu.lu, unlc.us, updating.me, upzat.com, ur1.ca, url.az, url.co.uk, url.ie, url2.fr, url4.eu, url5.org, url360.me, urlao.com, urlborg.com, urlbrief.com, urlcover.com, urlcut.com, urlenco.de, urlhawk.com, urli.nl, urlin.it, urlkiss.com, urlot.com, urlpire.com, urls.fr, urls.im, urlshorteningservicefortwitter.com, urlx.ie, urlx.org, urlz.fr, urlzen.com, urub.us, usat.ly, use.my, utfg.sk, v.gd, v.ht, v5.gd, vaaa.fr, valv.im, vaza.me, vb.ly, vbly.us, vd55.com, verd.in, vgn.am, vgn.me, viralurl.biz, viralurl.com, virl.com, virl.ws, vl.am, vm.lc, vov.li, vsll.eu, vt802.us, vur.me, vurl.bz, vv.vg, vzturl.com, w1p.fr, w3t.org, w55.de, waa.ai, wapo.st, wapurl.co.uk, wb1.eu, web99.eu, wed.li, wideo.fr, wipi.es, wp.me, wtc.la, wu.cz, ww7.fr, wwy.me, x.co, x.nu, x.se, x.vu, x2c.eu, x2c.eumx, x10.mx, xaddr.com, xav.cc, xeeurl.com, xgd.in, xib.me, xl8.eu, xn--hgi.ws, xoe.cz, xr.com, xrl.in, xrl.us, xt3.me, xua.me, xub.me, xurl.es, xurl.jp, xurls.co, xzb.cc, y.ahoo.it, yagoa.fr, yagoa.me, yatuc.com, yau.sh, ye.pe, yeca.eu, yect.com, yep.it, yfrog.com, yhoo.it, yiyd.com, yogh.me, yon.ir, youfap.me, yourls.org, ysear.ch, yuarel.com, yweb.com, yyv.co, z0p.de, z9.fr, zapit.nu, zeek.ir, zi.ma, zi.mu, zi.pe, zip.net, zipmyurl.com, zkr.cz, zkrat.me, zkrt.cz, zoodl.com, zpag.es, zsms.net, zti.me, zud.me, zurl.ws, zxq.net, zyva.org, zz.gd, zzang.kr, zzb.bz, ›.ws, tinypic.co, goo.gl, ibb.co]
+    action: filter
+    action_reason: Link shortener | [{{match}}] | Please review
+---
+
+#--------------------------------------------------------------------------------------------------------#
+#           _    _ _______ ____         _____  ______  _____ _____   ____  _   _  _____ ______  _____    #
+#      /\  | |  | |__   __/ __ \       |  __ \|  ____|/ ____|  __ \ / __ \| \ | |/ ____|  ____|/ ____|   #
+#     /  \ | |  | |  | | | |  | |______| |__) | |__  | (___ | |__) | |  | |  \| | (___ | |__  | (___     #
+#    / /\ \| |  | |  | | | |  | |______|  _  /|  __|  \___ \|  ___/| |  | | . ` |\___ \|  __|  \___ \    #
+#   / ____ \ |__| |  | | | |__| |      | | \ \| |____ ____) | |    | |__| | |\  |____) | |____ ____) |   #
+#  /_/    \_\____/   |_|  \____/       |_|  \_\______|_____/|_|     \____/|_| \_|_____/|______|_____/    #
+#                                                                                                        #
+#--------------------------------------------------------------------------------------------------------#
+
+# ----------------------------------------------------------------#
+#                     RULES REMINDER COMMENT                      #
+# ----------------------------------------------------------------#
+
+#  Rule Name: Rules reminder comment
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically adds a locked comment on all posts with rules reminder
+---
+type: submission
+comment_stickied: true
+comment_locked: true
+comment: |
+
+    **REMINDER:** All posts and comments must comply with our subreddit rules and [Reddit's Content Policy](https://redditinc.com/policies/reddit-rules). Our subreddit rules can be found in the sidebar. 
+
+    Feel free to reach out to us if you have any questions.
+
+    — The r/SubNameHere Mod Team
+---
