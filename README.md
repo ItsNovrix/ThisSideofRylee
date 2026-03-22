@@ -85,8 +85,9 @@ The code is divided into two primary sections:
 
 If you find the karma or age requirements too strict or too lenient, locate this section:
 
-`account_age: "< 7 days"
-combined_karma: "< 50"`
+```yaml
+account_age: "< 7 days"/
+combined_karma: "< 50"```
 
 Simply change the numbers to your preferred limits.
 
@@ -97,6 +98,14 @@ To add a word to the filters (like the Political or Offensive filters), add it t
 `["word1", "word2", "your_new_word"]`
 
 Note: Ensure strings are wrapped in double quotes and separated by commas.
+
+## Adjusting Report Sensitivity
+
+The current setting is: `reports: 1.`
+
+- 1 report: High security, but creates more work for mods.
+
+- 2-3 reports: Good for larger communities to prevent a single "troll report" from hiding content.
 
 # ⚠️ Technical Notes
 
