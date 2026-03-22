@@ -86,8 +86,9 @@ The code is divided into two primary sections:
 If you find the karma or age requirements too strict or too lenient, locate this section:
 
 ```yaml
-account_age: "< 7 days"/
-combined_karma: "< 50"```
+account_age: "< 7 days"
+combined_karma: "< 50"
+```
 
 Simply change the numbers to your preferred limits.
 
