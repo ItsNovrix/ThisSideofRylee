@@ -21,33 +21,6 @@ This repository contains an automoderator setup designed to automate content mod
 
 8. Technical Notes
 
- Gemini said
-
-This is a very comprehensive and well-structured AutoModerator configuration. It covers everything from basic spam protection to complex safety filters.
-
-Below is a README.md file tailored for this specific code. It explains the logic, the specific filters you've built, and how the user can customize it for their own community.
-🤖 Subreddit AutoModerator Suite
-Created By: ItsNovrix | Version 1.0 (March 2026)
-
-This repository contains a professional-grade config/automoderator setup designed to automate content moderation, enhance community safety, and reduce manual moderator workload. It includes advanced regex for threat detection, comprehensive spam site lists, and automated user feedback.
-📋 Table of Contents
-
-    Overview
-
-    Installation
-
-    Feature Breakdown
-
-        Safety & Security
-
-        Spam & Scam Prevention
-
-        Community Standards
-
-    Customization Guide
-
-    Technical Notes
-
 📖 Overview
 
 The code is divided into two primary sections:
