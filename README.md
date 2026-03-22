@@ -73,6 +73,35 @@ The code is divided into two primary sections:
 
 - Age/Karma Thresholds: Filters content from accounts less than 7 days old or with less than 50 karma.
 
+- Post Length Filter: TEXT HERE
+
 - Political Filter: Screens for highly volatile political keywords to keep the community focused on its primary topic.
 
 - Offensive Remarks/Sexual Harassment: Two heavy-duty blocks of keywords and regex to catch slurs, bigotry, and harassment.
+
+# ⚙️ Customization Guide
+
+## Changing Thresholds
+
+If you find the karma or age requirements too strict or too lenient, locate this section:
+
+`account_age: "< 7 days"
+combined_karma: "< 50"`
+
+Simply change the numbers to your preferred limits.
+
+## Adding New Keywords
+
+To add a word to the filters (like the Political or Offensive filters), add it to the list inside the brackets:
+
+`["word1", "word2", "your_new_word"]`
+
+Note: Ensure strings are wrapped in double quotes and separated by commas.
+
+# ⚠️ Technical Notes
+
+> **Action Logic:** Most rules use action: filter. This means the content is hidden from the public but appears in your Mod Queue for a final "Approve" or "Remove" decision.
+
+> **Regex:** Many rules use Regular Expressions (regex) to catch variations of words (e.g., catching "faggot" and "faggit"). Be careful when editing regex strings, as a missing bracket can break the entire configuration.
+
+> **Stickied Comments:** The Rules Reminder is set to appear on every post as a stickied and locked comment to ensure maximum visibility.
