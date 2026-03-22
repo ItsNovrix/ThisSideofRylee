@@ -4,8 +4,6 @@
 
 This repository contains an automoderator setup designed to automate content moderation, enhance community safety, and reduce manual moderator workload. It includes advanced regex for threat detection, comprehensive spam site lists, and automated user feedback.
 
----
-
 # 📋 Table of Contents
 
 1. Overview
