@@ -29,26 +29,27 @@
 # 2) MASS EDIT FILTER
 # 3) DOXXING FILTER
 # 4) THREAT FILTER
-# 4) TABLOID ACCOUNT FILTER
-# 5) AGE/KARMA FILTER
-# 6) POST LENGTH FILTER
-# 6) POLITICAL FILTER
-# 7) OFFENSIVE REMARKS FILTER
-# 8) SEXUAL HARASSMENT FILTER
-# 9) NSFW SITES FILTER
-# 10) SHOCK SITES FILTER
-# 11) SCAM/SPAM SITES FILTER
-# 12) T-SHIRT SPAM FILTER
-# 13) SNAPCHAT SPAM FILTER
-# 14) CROWDFUNDING SITES FILTER
-# 15) PETITION SITES FILTER
-# 16) LINK SHORTENER FILTER
+# 5) TABLOID ACCOUNT FILTER
+# 6) PROBATION FILTER
+# 7) AGE/KARMA FILTER
+# 8) POST LENGTH FILTER
+# 9) POLITICAL FILTER
+# 10) OFFENSIVE REMARKS FILTER
+# 11) SEXUAL HARASSMENT FILTER
+# 12) NSFW SITES FILTER
+# 13) SHOCK SITES FILTER
+# 14) SCAM/SPAM SITES FILTER
+# 15) T-SHIRT SPAM FILTER
+# 16) SNAPCHAT SPAM FILTER
+# 17) CROWDFUNDING SITES FILTER
+# 18) PETITION SITES FILTER
+# 19) LINK SHORTENER FILTER
 
 #---------------------------------#
 #        AUTO-RESPONSES           #
 #---------------------------------#
 
-# 17) RULES REMINDER COMMENT
+# 20) RULES REMINDER COMMENT
 
 #-----------------------------------------------------------------------------------------------------#
 #    _____ ____  _   _ _______ ______ _   _ _______   ______ _____ _   _______ ______ _____   _____   #
@@ -129,9 +130,9 @@
         "(go|burn|rot)\\s*in\\s*hell",
         "(crash\\s*and\\s*die|die\\s*in\\s*.*crash)",
         "I\\s*hope\\s*(you|she|he|they)\\s*dies?",
-        "(you|u|he|she|they|it|that)\\s*deserved\\s*it",
-        "(you|u|he|she|they|it|that)\\s*deserves?\\s*(to\\s*)?dies?",
-        "(you|u|he|she|they|it|that)\\s*(has|had|have)\\s*it\\s*coming",
+        "(you|u|he|she|they|it|that|Brian(\\s*Thompson)?|BT)?\\s*deserved\\s*it",
+        "(you|u|he|she|they|it|that|Brian(\\s*Thompson)?|BT)?\\s*deserves?\\s*(to\\s*)?dies?",
+        "(you|u|he|she|they|it|that|Brian(\\s*Thompson)?|BT)?\\s*(has|had|have)\\s*it\\s*coming",
 
         # Self-Harm
         "commit\\s*suicide",
@@ -167,10 +168,30 @@
     author:
         name (includes): [dailymail, tmz, people, okmagazine, pagesix, nypost]
     action: filter
-    action_reason: Tabloid User | {{author}} | Please review
+    action_reason: Tabloid user | {{author}} | Please review
     modmail: |
 
         User **u/{{author}}** submitted the above. This user is a tabloid user and their submission has been filtered to the mod queue.
+    
+        Please investigate and action the user if necessary.
+---
+#-----------------------------------------------------------------#
+#                       PROBATION FILTER                          #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Tabloid account filter
+#  Created By: ItsNovrix
+#  Created On: 3/15/26
+#  Description: Automatically filter users to the Mod Queue if they are on probation
+---
+    type: any
+    author:
+        name (includes): [Prestigious_Ad_5825]
+    action: filter
+    action_reason: User on probation | {{author}} | Please review
+    modmail: |
+
+        User **u/{{author}}** submitted the above. This user is on probation and their submission has been filtered to the mod queue.
     
         Please investigate and action the user if necessary.
 ---
@@ -231,7 +252,7 @@
 #  Description: Automatically filter possibly problematic political content
 ---
     type: any
-    title+body (regex): ["dei", "trump", "Donald", "Biden", "liberal", "nazi", "biden", "luigi", "tesla", "elon", "musk", "Charlie Kirk", "kirk", "tpusa", "turning point", "turning point usa", "libtard", "tds", "magat", "magats", "maggat", "maggats", "liberal\\W?morons?", "sjw", "snow\\W?flakes?", "TDS"]
+    title+body (regex): ["dei", "trump", "Donald", "Biden", "liberal", "nazi", "biden", "tpusa", "turning point", "turning point usa", "libtard", "tds", "magat", "magats", "maggat", "maggats", "liberal\\W?morons?", "sjw", "snow\\W?flakes?", "TDS"]
     action: filter
     action_reason: Political screening | [{{match}}] | Please review
 ---
