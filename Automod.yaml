@@ -25,31 +25,32 @@
 #        CONTENT FILTERS          #
 #---------------------------------#
 
-# 1) REPORT FILTER
-# 2) MASS EDIT FILTER
-# 3) DOXXING FILTER
-# 4) THREAT FILTER
-# 5) TABLOID ACCOUNT FILTER
-# 6) PROBATION FILTER
-# 7) AGE/KARMA FILTER
-# 8) POST LENGTH FILTER
-# 9) POLITICAL FILTER
-# 10) OFFENSIVE REMARKS FILTER
-# 11) SEXUAL HARASSMENT FILTER
-# 12) NSFW SITES FILTER
-# 13) SHOCK SITES FILTER
-# 14) SCAM/SPAM SITES FILTER
-# 15) T-SHIRT SPAM FILTER
-# 16) SNAPCHAT SPAM FILTER
-# 17) CROWDFUNDING SITES FILTER
-# 18) PETITION SITES FILTER
-# 19) LINK SHORTENER FILTER
+# 1) HOT TOPIC COMMENT FILTER
+# 2) REPORT FILTER
+# 3) MASS EDIT FILTER
+# 4) DOXXING FILTER
+# 5) THREAT FILTER
+# 6) TABLOID ACCOUNT FILTER
+# 7) PROBATION FILTER
+# 8) AGE/KARMA FILTER
+# 9) POST LENGTH FILTER
+# 10) POLITICAL FILTER
+# 11) OFFENSIVE REMARKS FILTER
+# 12) SEXUAL HARASSMENT FILTER
+# 13) NSFW SITES FILTER
+# 14) SHOCK SITES FILTER
+# 15) SCAM/SPAM SITES FILTER
+# 16) T-SHIRT SPAM FILTER
+# 17) SNAPCHAT SPAM FILTER
+# 18) CROWDFUNDING SITES FILTER
+# 19) PETITION SITES FILTER
+# 20) LINK SHORTENER FILTER
 
 #---------------------------------#
 #        AUTO-RESPONSES           #
 #---------------------------------#
 
-# 20) RULES REMINDER COMMENT
+# 21) RULES REMINDER COMMENT
 
 #-----------------------------------------------------------------------------------------------------#
 #    _____ ____  _   _ _______ ______ _   _ _______   ______ _____ _   _______ ______ _____   _____   #
@@ -61,6 +62,25 @@
 #                                                                                                     #
 #-----------------------------------------------------------------------------------------------------#
 
+# ----------------------------------------------------------------#
+#                  HOT TOPIC COMMENT FILTER                       #
+# ----------------------------------------------------------------#
+
+# Rule Name: Hot Topic Comment Filter
+# Created by: MableXeno
+# Created on: 06 May 2026
+# Description: Allows comments only from seasoned users on Hot Topic posts that may not benefit from new user interactions.
+---
+    type: comment
+    action: remove
+    action_reason: Hot Topic Comment Filter
+    author:
+      combined_subreddit_karma: < 27
+      is_submitter: false
+    parent_submission:
+      id:
+      - dummy
+---
 # ----------------------------------------------------------------#
 #                       REPORT FILTER                             #
 # ----------------------------------------------------------------#
@@ -179,14 +199,14 @@
 #                       PROBATION FILTER                          #
 #-----------------------------------------------------------------#
 
-#  Rule Name: Tabloid account filter
+#  Rule Name: Probation filter
 #  Created By: ItsNovrix
 #  Created On: 3/15/26
 #  Description: Automatically filter users to the Mod Queue if they are on probation
 ---
     type: any
     author:
-        name (includes): [Prestigious_Ad_5825]
+        name (includes): [Prestigious_Ad_5825, Turbulent-Phone-8493, DragonfruitToppng, Morpheus636_, Marta__9, ADADummy, paradepanda]
     action: filter
     action_reason: User on probation | {{author}} | Please review
     modmail: |
@@ -194,6 +214,21 @@
         User **u/{{author}}** submitted the above. This user is on probation and their submission has been filtered to the mod queue.
     
         Please investigate and action the user if necessary.
+---
+#-----------------------------------------------------------------#
+#                     SHADOWBAN FILTER                            #
+#-----------------------------------------------------------------#
+
+#  Rule Name: Shadowban filter
+#  Created By: ThisSideofRylee
+#  Created On: 5/6/26
+#  Description: Automatically remove posts/comments by specified users
+---
+    type: any
+    author:
+        name (includes): [GeekyTexan, notbetterthanu29]
+    action: remove
+    action_reason: Hard shadow ban   
 ---
 #-----------------------------------------------------------------#
 #                       AGE/KARMA FILTER                          #
@@ -207,8 +242,8 @@
     type: any
     moderators_exempt: true
     author:
-       account_age: "< 7 days"
-       combined_karma: "< 50"
+       account_age: "< 30 days"
+       combined_karma: "< 100"
        satisfy_any_threshold: true
     action: filter
     action_reason: "Account Age/Karma Threshold Not Met"
@@ -356,9 +391,10 @@
 ---
     type: comment
     body (regex): 
-        - '(add|contact|message|dm|pm|follow)\s*(me\s*)?(on\s*)?snap(chat)?'
-        - 'snap(chat)?\s*(is|:)\s*\w+'
-        - 'snap(chat)?\.com/\w+'
+        - '\bsnapchat\b'
+        - '\b(sc|snap): \w+'
+        - 'add me (on )?snap(chat)?'
+        - '(my|on) snap(chat)?( is|:)? \w+'
         - '\U0001F47B'
     action: filter
     action_reason: Possible Snapchat spam | [{{match}}] | Please review
