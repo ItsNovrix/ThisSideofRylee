@@ -1,4 +1,4 @@
-# ThisSideofRylee Automod Code
+# r/mangionetrials Automod Code
 Created By: ItsNovrix | Version 1.0 (March 2026)
 
 This repository contains an automoderator setup created for r/mangionetrials to automate content moderation, enhance community safety, and reduce manual moderator workload. It includes advanced regex for threat detection, offensive terms, comprehensive spam site lists, and other common areas of concern on Reddit.
